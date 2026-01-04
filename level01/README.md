@@ -84,7 +84,7 @@ level01@SnowCrash:~$ su flag01
 Password:
 Don't forget to launch getflag !
 flag01@SnowCrash:~$ getflag
-Check flag.Here is your token : f2ar5il02puano7naaf6adaaf
+Check flag.Here is your token : f2av5il02puano7naaf6adaaf
 flag01@SnowCrash:~$ su level02
 Password: [Token de f2ar5il...]
 
