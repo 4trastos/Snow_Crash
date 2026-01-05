@@ -113,3 +113,9 @@ PHP Notice:  Undefined variable: Check flag.Here is your token : wiok45aaoguiboi
 * **Análisis Forense:** Herramientas como `nm` y `strings` permitieron identificar que el binario SUID simplemente redirigía el flujo a un script interpretable más fácil de auditar.
 
 ---
+
+## 6. Referencias y Documentación
+* [PHP Manual: preg_replace modifier /e (deprecated)](https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php)
+* [StackOverflow: How can /e regex expression be misused on a PHP code snippet?](https://stackoverflow.com/questions/65024562/how-can-e-regex-expression-be-misused-on-a-php-code-snippet-running-on-my-ser)
+
+---
