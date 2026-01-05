@@ -1,7 +1,7 @@
 
 # SnowCrash - Level 03: Explotación de PATH Hijacking en Binarios SUID
 
-Este repositorio documenta el proceso de resolución del **Nivel 03** de SnowCrash. El reto consiste en identificar una ejecución insegura de comandos del sistema dentro de un binario con privilegios elevados y secuestrar el flujo de ejecución.
+Este repositorio documenta el proceso de resolución del **Nivel 03** de SnowCrash. El reto consiste en identificar una ejecución insegura de comandos del sistema dentro de un binario con privilegios elevados y secuestrar el flujo de ejecución y lograr el password.
 
 ## 1. Análisis Inicial
 
