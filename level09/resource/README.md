@@ -116,7 +116,9 @@ Ejecutamos nuestro decodificador sobre el archivo `token` original de la VM:
 2. **Contraseña:** `f3iji1ju5yuevaus41q1afiuq`
 3. **Obtención del flag:** `getflag`
 
-* **Token obtenido:** `s5cAJpM8ev6XHw998pRWG728z` (Nota: usa el token real que te dé `getflag`).
+* **Token obtenido:** `s5cAJpM8ev6XHw998pRWG728z`
+
+**Level 09 passed!**
 
 ---
 

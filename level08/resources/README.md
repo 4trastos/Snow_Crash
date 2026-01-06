@@ -92,9 +92,9 @@ getflag
 
 ```
 
-
-
 * **Token Final:** `25749xKZ8L7DkSCwJkT9dyv6f`
+
+**Level 08 passed!**
 
 ---
 
