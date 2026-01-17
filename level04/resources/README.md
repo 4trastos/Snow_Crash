@@ -41,7 +41,7 @@ x(param("x"));
 
 ### Vulnerabilidades Detectadas:
 
-1. **Uso de Backticks (" "):** En Perl, los backticks ejecutan comandos directamente en la shell del sistema.
+1. **Uso de Backticks (' '):** En Perl, los backticks ejecutan comandos directamente en la shell del sistema.
 2. **Falta de Sanitización:** El parámetro `x` se recibe directamente del usuario a través de `param("x")` y se interpola en la cadena de ejecución de `echo` sin ningún filtro.
 3. **Inyección de Shell:** Al concatenar `$y` dentro del comando `echo`, un atacante puede insertar metacaracteres de shell (como `;`, `&&` o `$( )`) para ejecutar comandos arbitrarios.
 
