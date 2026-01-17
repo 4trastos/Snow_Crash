@@ -4,7 +4,7 @@ Este repositorio documenta el proceso de resolución del **Nivel 05** de SnowCra
 
 ## 1. Análisis Inicial
 
-(Si estamos conectados por ssh debemos de subir de nivel en la VM).
+Nos desconectamos de la VM y nos loguamos como level05.
 Cuando iniciamos sesión como nivel 05, recibimos automáticamente el mensaje: "You have new mail".
 
 Realizamos una búsqueda de donde se guardan los mails:
