@@ -4,6 +4,20 @@ Este repositorio documenta el proceso de resolución del **Nivel 05** de SnowCra
 
 ## 1. Análisis Inicial
 
+Cuando iniciamos sesión como nivel 05, recibimos automáticamente el mensaje: "You have new mail".
+Tras investigar un poco, encontramos el archivo "nivel 05" en "/var/mail/level05".
+```
+level05@SnowCrash:~$ cat /var/mail/level05
+*/2 * * * * su -c "sh /usr/sbin/openarenaserver" - flag05
+level05@SnowCrash:~$
+```
+
+Podemos ver que cada 2 minutos se ejecuta "/usr/sbin/openarenaserver".
+```
+level05@SnowCrash:~$ ls -la /usr/sbin/openarenaserver
+-rwxr-x---+ 1 flag05 flag05 94 Mar  5  2016 /usr/sbin/openarenaserver
+level05@SnowCrash:~$
+```
 ### Localización del Script
 
 Al iniciar el nivel, buscamos archivos pertenecientes al usuario `flag05` o que tengan configuraciones inusuales. Encontramos un script en una ruta de binarios del sistema:
