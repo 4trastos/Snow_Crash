@@ -6,7 +6,18 @@ Este repositorio documenta el proceso de resolución del **Nivel 05** de SnowCra
 
 (Si estamos conectados por ssh debemos de subir de nivel en la VM).
 Cuando iniciamos sesión como nivel 05, recibimos automáticamente el mensaje: "You have new mail".
-Tras investigar un poco, encontramos el archivo "nivel 05" en "/var/mail/level05".
+
+Realizamos una búsqueda de donde se guardan los mails:
+```
+level05@SnowCrash:~$ find / -name mail 2>/dev/null 
+/usr/lib/byobu/mail
+/var/mail
+/var/spool/mail
+/rofs/usr/lib/byobu/mail
+/rofs/var/mail
+/rofs/var/spool/mail
+```
+Invetigamos que contiene la varible de los mails de "nivel 05" en "/var/mail/level05".
 ```
 level05@SnowCrash:~$ cat /var/mail/level05
 */2 * * * * su -c "sh /usr/sbin/openarenaserver" - flag05
@@ -21,8 +32,7 @@ level05@SnowCrash:~$
 ```
 ### Localización del Script
 
-Al iniciar el nivel, buscamos archivos pertenecientes al usuario `flag05` o que tengan configuraciones inusuales. Encontramos un script en una ruta de binarios del sistema:
-
+Encontramos un script en una ruta de binarios del sistema:
 ```bash
 ls -la /usr/sbin/openarenaserver
 # -rwxr-x---+ 1 flag05 flag05 94 Mar  5  2016 /usr/sbin/openarenaserver
