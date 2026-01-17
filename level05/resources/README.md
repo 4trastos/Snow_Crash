@@ -17,6 +17,7 @@ level05@SnowCrash:~$ find / -name mail 2>/dev/null
 /rofs/var/mail
 /rofs/var/spool/mail
 ```
+
 Invetigamos que contiene la varible de los mails de "nivel 05" en "/var/mail/level05".
 Y podemos ver que cada 2 minutos se ejecuta "/usr/sbin/openarenaserver".
 ```
