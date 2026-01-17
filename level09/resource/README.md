@@ -1,50 +1,142 @@
-# SnowCrash - Level 09: Cifrado de Rotación Progresiva
+# SnowCrash — Level 09
 
-Este repositorio documenta la resolución del **Nivel 09**. El reto consiste en revertir un algoritmo de ofuscación de caracteres aplicado a un archivo de autenticación.
+**Decodificación de un cifrado progresivo aplicado a un archivo protegido**
 
-## 1. Análisis Inicial
+Este documento describe la resolución del **Nivel 09** siguiendo estrictamente los pasos reales ejecutados durante el proceso.
 
-Al listar el directorio, encontramos un binario con bit SUID y un archivo llamado `token`:
+---
+
+## 1. Análisis Inicial del Entorno
+
+Listado del directorio home:
 
 ```bash
 ls -la
-# -rwsr-sr-x 1 flag09  level09 7640 Mar  5  2016 level09
-# ----r--r-- 1 flag09  level09   26 Mar  5  2016 token
-
 ```
 
-### Comportamiento del Binario
-
-Al probar el binario con una entrada conocida, descubrimos el patrón de cifrado:
-
-* Entrada: `aaaaaaaa`
-* Salida: `abcdefgh`
-
-**Deducción del Algoritmo:**
-El programa aplica un cifrado de rotación donde el valor sumado a cada carácter es igual a su índice (posición) en la cadena:
-
-
----
-
-## 2. Ingeniería Inversa y Limitaciones
-
-Intentamos analizar el binario con `ltrace`, pero descubrimos una protección **anti-debugging**:
+Salida:
 
 ```text
-ptrace(PTRACE_TRACEME, ...) = -1
-"You should not reverse this"
-
+dr-x------ 1 level09 level09  140 Mar  5  2016 .
+d--x--x--x 1 root    users    340 Aug 30  2015 ..
+-r-x------ 1 level09 level09  220 Apr  3  2012 .bash_logout
+-r-x------ 1 level09 level09 3518 Aug 30  2015 .bashrc
+-rwsr-sr-x 1 flag09  level09 7640 Mar  5  2016 level09
+-r-x------ 1 level09 level09  675 Apr  3  2012 .profile
+----r--r-- 1 flag09  level09   26 Mar  5  2016 token
 ```
 
-El binario utiliza `ptrace` para detectar si está siendo trazado y abortar la ejecución. Sin embargo, dado que ya hemos deducido el algoritmo mediante "caja negra" (probando entradas y salidas), el análisis dinámico no es estrictamente necesario.
+Observaciones:
+
+* Existe un binario **SUID** llamado `level09` perteneciente a `flag09`.
+* El archivo `token` pertenece a `flag09` y **no es legible** por el usuario actual (`level09`).
 
 ---
 
-## 3. Implementación del Exploit (C)
+## 2. Análisis del Binario `level09`
 
-El archivo `token` contiene caracteres no imprimibles, lo que impide pasarlo como argumento de shell sin corromper los datos. La solución es desarrollar un programa en python que lea el archivo directamente byte a byte y aplique la operación inversa:
+Ejecutamos el binario sin argumentos:
 
-### Código del Decodificador (`decrypt.py`)
+```bash
+./level09
+```
+
+Salida:
+
+```text
+You need to provied only one arg.
+```
+
+Ejecutamos el binario con el archivo `token` como argumento:
+
+```bash
+./level09 token
+```
+
+Salida:
+
+```text
+tpmhr
+```
+
+Probamos con una entrada controlada:
+
+```bash
+./level09 aaaaaaaaa
+```
+
+Salida:
+
+```text
+abcdefghi
+```
+
+### Deducción del algoritmo:
+
+El binario **suma el índice** de cada carácter a su valor ASCII:
+
+* `'a' + 0 → 'a'`
+* `'a' + 1 → 'b'`
+* `'a' + 2 → 'c'`
+* etc.
+
+Es decir, aplica un **cifrado de rotación progresiva**.
+
+---
+
+## 3. Inspección Directa del Archivo `token`
+
+Intentamos leer el archivo directamente:
+
+```bash
+cat token
+```
+
+Salida:
+
+```text
+f4kmm6p|=�p�n��DB�Du{��
+```
+
+El contenido incluye **caracteres no imprimibles**, por lo que no puede pasarse correctamente como argumento literal al shell.
+
+Probamos parcialmente:
+
+```bash
+./level09 'f4kmm6p|=pnDBDu{'
+```
+
+Salida:
+
+```text
+f5mpq;v�EyxONQ��
+```
+
+Intentamos usar esa salida como contraseña:
+
+```bash
+su flag09
+Password: f5mpq;vEyxONQ
+```
+
+Resultado:
+
+```text
+su: Authentication failure
+```
+
+Conclusión:
+La contraseña está completa en `token`, pero necesitamos **decodificarla correctamente byte a byte**.
+
+---
+
+## 4. Desarrollo del Decodificador en el Host
+
+Dado que el binario suma el índice al carácter, la operación inversa es:
+
+> **restar el índice** a cada carácter.
+
+Creamos el script `decrypt.py` en el host:
 
 ```python
 import sys
@@ -54,37 +146,73 @@ decrypted_hash = ""
 for i in range(0, len(hash)):
     decrypted_hash = decrypted_hash + chr(ord(hash[i]) - i)
 print(decrypted_hash)
+```
 
+Lo copiamos a la VM:
+
+```bash
+scp -P 4242 decrypt.py level09@192.168.0.23:/tmp/.
 ```
 
 ---
 
-## 4. Resultado y Resolución
+## 5. Ejecución del Decodificador en la VM
 
-Ejecutamos nuestro decodificador sobre el archivo `token` original de la VM:
+Ejecutamos el script pasando el contenido real de `token`:
 
 ```bash
-./a.out token
-# Salida: f3iji1ju5yuevaus41q1afiuq
-
+python /tmp/decrypt.py `cat token`
 ```
 
-### Escalada Final:
+Salida:
 
-1. **Cambio a flag09:** `su flag09`
-2. **Contraseña:** `f3iji1ju5yuevaus41q1afiuq`
-3. **Obtención del flag:** `getflag`
+```text
+f3iji1ju5yuevaus41q1afiuq
+```
 
-* **Token obtenido:** `s5cAJpM8ev6XHw998pRWG728z`
+---
+
+## 6. Escalada Final
+
+Usamos la contraseña decodificada:
+
+```bash
+su flag09
+Password: f3iji1ju5yuevaus41q1afiuq
+```
+
+Salida:
+
+```text
+Don't forget to launch getflag !
+```
+
+Obtenemos la flag:
+
+```bash
+getflag
+```
+
+Resultado:
+
+```text
+Check flag.Here is your token : s5cAJpM8ev6XHw998pRWG728z
+```
 
 **Level 09 passed!**
 
 ---
 
-## 5. Conclusiones Técnicas
+## 7. Conclusiones Técnicas
 
-* **Criptografía Débil:** Un cifrado basado únicamente en la posición del carácter es vulnerable a ataques de texto plano conocido.
-* **Anti-Debugging:** El uso de `ptrace` es una técnica común para dificultar el análisis, pero no protege contra la deducción lógica del algoritmo.
-* **Manipulación de Datos Binarios:** Leer archivos directamente en C es la forma más fiable de procesar datos que contienen caracteres no ASCII.
+* El sistema utiliza un **cifrado débil**, basado únicamente en la posición del carácter.
+* La protección SUID permite leer el archivo `token`, pero no evita su **reversión lógica**.
+* El tratamiento de datos binarios requiere **lectura directa del archivo**, no argumentos de shell.
+* Este nivel entrena habilidades de:
+
+  * análisis de comportamiento
+  * deducción algorítmica
+  * manipulación segura de datos binarios
+  * inversión de funciones simples
 
 ---
